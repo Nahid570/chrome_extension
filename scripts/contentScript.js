@@ -66,22 +66,71 @@ function getProductDetails() {
   );
   const price_input = document.getElementById("input_price");
 
+  const conditionRadio = document.querySelectorAll(
+    ".custom-radio--1pHhU .sr-only--4m2kh"
+  );
+  const brand_input = document.getElementById("input_Brand");
+  const model_input = document.getElementById("input_5");
+
   chrome.storage.sync.get(
     ["title", "price", "productinfo", "description"],
     (data) => {
+      console.log(data);
       let newPrice = "";
       for (let i = 0; i < data.price.length; i++) {
         if (data.price[i] !== ",") {
           newPrice += data.price[i];
         }
       }
-      if (title_input) {
-        // title_input.value = data.title ?? "";
+      setTimeout(() => {
+        title_input.value = data.title ?? "";
+        title_input.dispatchEvent(new Event("input", { bubbles: true }));
+      }, 0);
+
+      // Price input
+      setTimeout(() => {
+        price_input.value = newPrice ?? "";
+        price_input.dispatchEvent(new Event("input", { bubbles: true }));
+      }, 50); // A slight delay to ensure events do not interfere
+
+      // Description input
+      setTimeout(() => {
+        description_input.value = data.description ?? "";
+        description_input.dispatchEvent(new Event("input", { bubbles: true }));
+      }, 100);
+
+      if (data.productinfo.Condition) {
+        setTimeout(() => {
+          conditionRadio.forEach((radioBtn) => {
+            if (radioBtn.value === data.productinfo.Condition.toLowerCase()) {
+              radioBtn.checked = true;
+              radioBtn.dispatchEvent(new Event("change", { bubbles: true }));
+            }
+          });
+        }, 110);
       }
-      if (description_input) {
-        description_input.value = "Hello World";
+
+      if (data.productinfo.Brand) {
+        console.log("Is brand executing ?");
+        setTimeout(() => {
+          const brand_dropdown = document.querySelector("form");
+          console.log(brand_dropdown);
+          // selectOptionFromDropdown(brand_dropdown, data.productinfo.Brand);
+        }, 120);
+
+        // if (data.productinfo.Model) {
+        //   setTimeout(() => {
+        //     model_input.value = data.productinfo.Model;
+        //     model_input.dispatchEvent(new Event("input", { bubbles: true }));
+        //   }, 130);
+        // }
       }
-      // price_input.value = newPrice ?? "";
     }
   );
+}
+
+function selectOptionFromDropdown(dropdownElement, value) {
+  const options = dropdownElement.querySelectorAll("li[role='option");
+  console.log(options);
+  // console.log(options);
 }
