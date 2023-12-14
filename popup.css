@@ -1,0 +1,43 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 20rem;
+  height: 15rem;
+  background-color: black;
+  padding: 1rem;
+}
+
+header h1 {
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  border-bottom: 2px solid red;
+}
+
+main {
+  width: 100%;
+  background: whitesmoke;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main button {
+  border: none;
+  background-color: green;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 20px;
+}

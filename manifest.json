@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "Bikroy.com Product Info Autofill",
+    "description": "Extract product info and Autofill this info while upload product",
+    "version": "1.0",
+    "permissions": ["storage", "tabs"],
+    "content_scripts": [
+      {
+        "matches": ["https://bikroy.com/en/ad/*", "https://bikroy.com/en/post-ad/*"],
+        "js": ["./scripts/contentScript.js"]
+      }
+    ],
+    "background": {
+        "service_worker": "service-worker.js",
+        "type": "module"
+    },
+    "action": {
+      "default_popup": "popup.html"
+    }
+  }
+  
