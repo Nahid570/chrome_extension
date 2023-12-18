@@ -8,7 +8,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   if (message.type === "getProduct") {
-    console.log("Getting products!...");
     getProductDetails();
     sendResponse({ success: true });
   }
@@ -69,8 +68,9 @@ function getProductDetails() {
   const conditionRadio = document.querySelectorAll(
     ".custom-radio--1pHhU .sr-only--4m2kh"
   );
-  const brand_input = document.getElementById("input_Brand");
-  const model_input = document.getElementById("input_5");
+  const allSelectFields = document.querySelectorAll(
+    ".config-fields-wrapper--3rndl .form-field-wrapper--SzdnY"
+  );
 
   chrome.storage.sync.get(
     ["title", "price", "productinfo", "description"],
@@ -82,22 +82,30 @@ function getProductDetails() {
           newPrice += data.price[i];
         }
       }
-      setTimeout(() => {
-        title_input.value = data.title ?? "";
-        title_input.dispatchEvent(new Event("input", { bubbles: true }));
-      }, 0);
+      if (title_input) {
+        setTimeout(() => {
+          title_input.value = data.title ?? "";
+          title_input.dispatchEvent(new Event("input", { bubbles: true }));
+        }, 0);
+      }
 
       // Price input
-      setTimeout(() => {
-        price_input.value = newPrice ?? "";
-        price_input.dispatchEvent(new Event("input", { bubbles: true }));
-      }, 50); // A slight delay to ensure events do not interfere
+      if (price_input) {
+        setTimeout(() => {
+          price_input.value = newPrice ?? "";
+          price_input.dispatchEvent(new Event("input", { bubbles: true }));
+        }, 50); // A slight delay to ensure events do not interfere
+      }
 
       // Description input
-      setTimeout(() => {
-        description_input.value = data.description ?? "";
-        description_input.dispatchEvent(new Event("input", { bubbles: true }));
-      }, 100);
+      if (description_input) {
+        setTimeout(() => {
+          description_input.value = data.description ?? "";
+          description_input.dispatchEvent(
+            new Event("input", { bubbles: true })
+          );
+        }, 100);
+      }
 
       if (data.productinfo.Condition) {
         setTimeout(() => {
@@ -111,26 +119,113 @@ function getProductDetails() {
       }
 
       if (data.productinfo.Brand) {
-        console.log("Is brand executing ?");
+        // const getBtns = allSelectFields[1].querySelectorAll(
+        //   ".dropdown-wrapper--HTHHu .dd-button-wrapper--28F_E"
+        // );
+        // console.log(getBtns);
+        selectDesireDropdown(allSelectFields[1]);
+        const options = allSelectFields[1].querySelector(".menu--1PZC_");
         setTimeout(() => {
-          const brand_dropdown = document.querySelector("form");
-          console.log(brand_dropdown);
-          // selectOptionFromDropdown(brand_dropdown, data.productinfo.Brand);
-        }, 120);
+          const allOptions = options.querySelectorAll(".item--184dY");
+          selectedoption(allOptions, data.productinfo.Brand);
 
-        // if (data.productinfo.Model) {
-        //   setTimeout(() => {
-        //     model_input.value = data.productinfo.Model;
-        //     model_input.dispatchEvent(new Event("input", { bubbles: true }));
-        //   }, 130);
-        // }
+          const modelDropdownBtns = allSelectFields[1].querySelectorAll(
+            ".dropdown-wrapper--HTHHu .dd-button-wrapper--28F_E"
+          );
+          const modelResetBtns = allSelectFields[1].querySelectorAll(
+            ".dropdown-wrapper--HTHHu .reset-button--16akp"
+          );
+          // console.log(modelDropdownBtns);
+
+          setTimeout(() => {
+            // getBtns[1].click();
+            if (modelResetBtns[1]) {
+              modelResetBtns[1].click();
+            }
+            modelDropdownBtns[1].click();
+            let modelOptions =
+              allSelectFields[1].querySelectorAll(".menu--1PZC_");
+
+            setTimeout(() => {
+              const allModelOptions =
+                modelOptions[1].querySelectorAll(".item--184dY");
+              selectedoption(allModelOptions, data.productinfo.Model);
+            }, 0);
+          }, 1000);
+        }, 0);
       }
+
+      // RAM
+      if (data.productinfo.RAM) {
+        selectDesireDropdown(allSelectFields[2]);
+        setTimeout(() => {
+          const options = allSelectFields[2].querySelector(".menu--1PZC_");
+          const allOptions = options.querySelectorAll(".item--184dY");
+          selectedoption(allOptions, data.productinfo.RAM);
+        }, 20);
+      } else {
+        selectDesireDropdown(allSelectFields[2]);
+        setTimeout(() => {
+          const options = allSelectFields[2].querySelector(".menu--1PZC_");
+          const allOptions = options.querySelectorAll(".item--184dY");
+          allOptions[0].click();
+        }, 20);
+      }
+
+      // Processor
+      if (data.productinfo.Processor) {
+        selectDesireDropdown(allSelectFields[3]);
+        setTimeout(() => {
+          const options = allSelectFields[3].querySelector(".menu--1PZC_");
+          const allOptions = options.querySelectorAll(".item--184dY");
+          selectedoption(allOptions, data.productinfo.Processor);
+        }, 40);
+      } else {
+        selectDesireDropdown(allSelectFields[3]);
+        setTimeout(() => {
+          const options = allSelectFields[3].querySelector(".menu--1PZC_");
+          const allOptions = options.querySelectorAll(".item--184dY");
+          allOptions[0].click();
+        }, 40);
+      }
+
+      // HDD
+      if (data.productinfo.HDD) {
+        selectDesireDropdown(allSelectFields[4]);
+        setTimeout(() => {
+          const options = allSelectFields[4].querySelector(".menu--1PZC_");
+          const allOptions = options.querySelectorAll(".item--184dY");
+          selectedoption(allOptions, data.productinfo.HDD);
+        }, 50);
+      } else {
+        selectDesireDropdown(allSelectFields[4]);
+        setTimeout(() => {
+          const options = allSelectFields[4].querySelector(".menu--1PZC_");
+          const allOptions = options.querySelectorAll(".item--184dY");
+          allOptions[0].click();
+        }, 50);
+      }
+      //
+      //
     }
   );
 }
 
-function selectOptionFromDropdown(dropdownElement, value) {
-  const options = dropdownElement.querySelectorAll("li[role='option");
-  console.log(options);
-  // console.log(options);
+function selectedoption(allOptions, value) {
+  allOptions.forEach((option) => {
+    if (option.innerText.toLowerCase() === value.toLowerCase()) {
+      option.click();
+    }
+  });
+}
+
+function selectDesireDropdown(selectNumber) {
+  const brandOpenDropdownBtn = selectNumber.querySelector(
+    ".dd-button-wrapper--28F_E"
+  );
+  const clearSelect = selectNumber.querySelector(".reset-button--16akp");
+  if (clearSelect) {
+    clearSelect.click();
+  }
+  brandOpenDropdownBtn.click();
 }

@@ -27,11 +27,24 @@ main {
   padding-top: 1rem;
   padding-bottom: 5rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-main button {
+#create_post {
+  background-color: black;
+  cursor: pointer;
+  padding: 1rem;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-bottom-right-radius: 50px;
+  border-top-left-radius: 50px;
+  font-size: 1.2rem;
+}
+
+main #copyBtn {
   border: none;
   background-color: green;
   color: white;
@@ -40,4 +53,9 @@ main button {
   cursor: pointer;
   padding: 1rem;
   border-radius: 20px;
+  margin-top: 20px;
+}
+
+main .upload_container label {
+  font-size: 1.2rem;
 }
